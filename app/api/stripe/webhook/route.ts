@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { STRIPE_PRICE_TO_PLAN } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
-import { PLAN_LIMITS } from "@/lib/tenant";
+import { PLAN_LIMITS } from "@/lib/stripe";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
