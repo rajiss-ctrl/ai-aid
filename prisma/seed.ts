@@ -18,13 +18,13 @@ async function main() {
     console.log("📝 Creating Super Admin...");
 
     let org = await prisma.organization.findFirst({
-      where: { name: "NexusAI System" },
+      where: { name: "AI-AID System" },
     });
 
     if (!org) {
       org = await prisma.organization.create({
         data: {
-          name: "NexusAI System",
+          name: "AI-AID System",
           slug: "nexusai-system-" + Date.now(),
           plan: "ENTERPRISE",
           tokenLimit: 100000000,
@@ -38,7 +38,7 @@ async function main() {
     await prisma.user.create({
       data: {
         name: "Super Admin",
-        email: "superadmin@nexusai.com",
+        email: "superadmin@ai-aid.com",
         password: hashedPassword,
         role: "OWNER",
         orgId: org.id,
@@ -47,7 +47,7 @@ async function main() {
     });
 
     console.log("✅ Super Admin created!");
-    console.log("📧 Email: superadmin@nexusai.com");
+    console.log("📧 Email: superadmin@ai-aid.com");
     console.log("🔑 Password: SuperAdmin123!");
   } else {
     console.log("⚠️ Super Admin already exists, skipping...");

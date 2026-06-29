@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
     }
     
     return NextResponse.json(
-      { error: err.message || "Something went wrong" },
+      { error: err.message || "Something went wrong", detail: err?.meta || err?.code },
       { status: 500 }
     );
   }

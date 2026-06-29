@@ -83,7 +83,6 @@ export const OrganizationScalarFieldEnum = {
   slug: 'slug',
   plan: 'plan',
   stripeCustomerId: 'stripeCustomerId',
-  niche: 'niche',
   stripeSubId: 'stripeSubId',
   tokenLimit: 'tokenLimit',
   tokensUsed: 'tokensUsed',

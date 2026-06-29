@@ -42,7 +42,6 @@ export type OrganizationMinAggregateOutputType = {
   slug: string | null
   plan: $Enums.Plan | null
   stripeCustomerId: string | null
-  niche: string | null
   stripeSubId: string | null
   tokenLimit: number | null
   tokensUsed: number | null
@@ -57,7 +56,6 @@ export type OrganizationMaxAggregateOutputType = {
   slug: string | null
   plan: $Enums.Plan | null
   stripeCustomerId: string | null
-  niche: string | null
   stripeSubId: string | null
   tokenLimit: number | null
   tokensUsed: number | null
@@ -72,7 +70,6 @@ export type OrganizationCountAggregateOutputType = {
   slug: number
   plan: number
   stripeCustomerId: number
-  niche: number
   stripeSubId: number
   tokenLimit: number
   tokensUsed: number
@@ -99,7 +96,6 @@ export type OrganizationMinAggregateInputType = {
   slug?: true
   plan?: true
   stripeCustomerId?: true
-  niche?: true
   stripeSubId?: true
   tokenLimit?: true
   tokensUsed?: true
@@ -114,7 +110,6 @@ export type OrganizationMaxAggregateInputType = {
   slug?: true
   plan?: true
   stripeCustomerId?: true
-  niche?: true
   stripeSubId?: true
   tokenLimit?: true
   tokensUsed?: true
@@ -129,7 +124,6 @@ export type OrganizationCountAggregateInputType = {
   slug?: true
   plan?: true
   stripeCustomerId?: true
-  niche?: true
   stripeSubId?: true
   tokenLimit?: true
   tokensUsed?: true
@@ -231,7 +225,6 @@ export type OrganizationGroupByOutputType = {
   slug: string
   plan: $Enums.Plan
   stripeCustomerId: string | null
-  niche: string
   stripeSubId: string | null
   tokenLimit: number
   tokensUsed: number
@@ -269,7 +262,6 @@ export type OrganizationWhereInput = {
   slug?: Prisma.StringFilter<"Organization"> | string
   plan?: Prisma.EnumPlanFilter<"Organization"> | $Enums.Plan
   stripeCustomerId?: Prisma.StringNullableFilter<"Organization"> | string | null
-  niche?: Prisma.StringFilter<"Organization"> | string
   stripeSubId?: Prisma.StringNullableFilter<"Organization"> | string | null
   tokenLimit?: Prisma.IntFilter<"Organization"> | number
   tokensUsed?: Prisma.IntFilter<"Organization"> | number
@@ -287,7 +279,6 @@ export type OrganizationOrderByWithRelationInput = {
   slug?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
-  niche?: Prisma.SortOrder
   stripeSubId?: Prisma.SortOrderInput | Prisma.SortOrder
   tokenLimit?: Prisma.SortOrder
   tokensUsed?: Prisma.SortOrder
@@ -309,7 +300,6 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.OrganizationWhereInput | Prisma.OrganizationWhereInput[]
   name?: Prisma.StringFilter<"Organization"> | string
   plan?: Prisma.EnumPlanFilter<"Organization"> | $Enums.Plan
-  niche?: Prisma.StringFilter<"Organization"> | string
   tokenLimit?: Prisma.IntFilter<"Organization"> | number
   tokensUsed?: Prisma.IntFilter<"Organization"> | number
   createdAt?: Prisma.DateTimeFilter<"Organization"> | Date | string
@@ -326,7 +316,6 @@ export type OrganizationOrderByWithAggregationInput = {
   slug?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
-  niche?: Prisma.SortOrder
   stripeSubId?: Prisma.SortOrderInput | Prisma.SortOrder
   tokenLimit?: Prisma.SortOrder
   tokensUsed?: Prisma.SortOrder
@@ -349,7 +338,6 @@ export type OrganizationScalarWhereWithAggregatesInput = {
   slug?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   plan?: Prisma.EnumPlanWithAggregatesFilter<"Organization"> | $Enums.Plan
   stripeCustomerId?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
-  niche?: Prisma.StringWithAggregatesFilter<"Organization"> | string
   stripeSubId?: Prisma.StringNullableWithAggregatesFilter<"Organization"> | string | null
   tokenLimit?: Prisma.IntWithAggregatesFilter<"Organization"> | number
   tokensUsed?: Prisma.IntWithAggregatesFilter<"Organization"> | number
@@ -364,7 +352,6 @@ export type OrganizationCreateInput = {
   slug: string
   plan?: $Enums.Plan
   stripeCustomerId?: string | null
-  niche?: string
   stripeSubId?: string | null
   tokenLimit?: number
   tokensUsed?: number
@@ -382,7 +369,6 @@ export type OrganizationUncheckedCreateInput = {
   slug: string
   plan?: $Enums.Plan
   stripeCustomerId?: string | null
-  niche?: string
   stripeSubId?: string | null
   tokenLimit?: number
   tokensUsed?: number
@@ -400,7 +386,6 @@ export type OrganizationUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  niche?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenLimit?: Prisma.IntFieldUpdateOperationsInput | number
   tokensUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -418,7 +403,6 @@ export type OrganizationUncheckedUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  niche?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenLimit?: Prisma.IntFieldUpdateOperationsInput | number
   tokensUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -436,7 +420,6 @@ export type OrganizationCreateManyInput = {
   slug: string
   plan?: $Enums.Plan
   stripeCustomerId?: string | null
-  niche?: string
   stripeSubId?: string | null
   tokenLimit?: number
   tokensUsed?: number
@@ -451,7 +434,6 @@ export type OrganizationUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  niche?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenLimit?: Prisma.IntFieldUpdateOperationsInput | number
   tokensUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -466,7 +448,6 @@ export type OrganizationUncheckedUpdateManyInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  niche?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenLimit?: Prisma.IntFieldUpdateOperationsInput | number
   tokensUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -481,7 +462,6 @@ export type OrganizationCountOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
-  niche?: Prisma.SortOrder
   stripeSubId?: Prisma.SortOrder
   tokenLimit?: Prisma.SortOrder
   tokensUsed?: Prisma.SortOrder
@@ -501,7 +481,6 @@ export type OrganizationMaxOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
-  niche?: Prisma.SortOrder
   stripeSubId?: Prisma.SortOrder
   tokenLimit?: Prisma.SortOrder
   tokensUsed?: Prisma.SortOrder
@@ -516,7 +495,6 @@ export type OrganizationMinOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
-  niche?: Prisma.SortOrder
   stripeSubId?: Prisma.SortOrder
   tokenLimit?: Prisma.SortOrder
   tokensUsed?: Prisma.SortOrder
@@ -607,7 +585,6 @@ export type OrganizationCreateWithoutUsersInput = {
   slug: string
   plan?: $Enums.Plan
   stripeCustomerId?: string | null
-  niche?: string
   stripeSubId?: string | null
   tokenLimit?: number
   tokensUsed?: number
@@ -624,7 +601,6 @@ export type OrganizationUncheckedCreateWithoutUsersInput = {
   slug: string
   plan?: $Enums.Plan
   stripeCustomerId?: string | null
-  niche?: string
   stripeSubId?: string | null
   tokenLimit?: number
   tokensUsed?: number
@@ -657,7 +633,6 @@ export type OrganizationUpdateWithoutUsersInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  niche?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenLimit?: Prisma.IntFieldUpdateOperationsInput | number
   tokensUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -674,7 +649,6 @@ export type OrganizationUncheckedUpdateWithoutUsersInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  niche?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenLimit?: Prisma.IntFieldUpdateOperationsInput | number
   tokensUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -691,7 +665,6 @@ export type OrganizationCreateWithoutUsageLogsInput = {
   slug: string
   plan?: $Enums.Plan
   stripeCustomerId?: string | null
-  niche?: string
   stripeSubId?: string | null
   tokenLimit?: number
   tokensUsed?: number
@@ -708,7 +681,6 @@ export type OrganizationUncheckedCreateWithoutUsageLogsInput = {
   slug: string
   plan?: $Enums.Plan
   stripeCustomerId?: string | null
-  niche?: string
   stripeSubId?: string | null
   tokenLimit?: number
   tokensUsed?: number
@@ -741,7 +713,6 @@ export type OrganizationUpdateWithoutUsageLogsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  niche?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenLimit?: Prisma.IntFieldUpdateOperationsInput | number
   tokensUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -758,7 +729,6 @@ export type OrganizationUncheckedUpdateWithoutUsageLogsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  niche?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenLimit?: Prisma.IntFieldUpdateOperationsInput | number
   tokensUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -775,7 +745,6 @@ export type OrganizationCreateWithoutInvitesInput = {
   slug: string
   plan?: $Enums.Plan
   stripeCustomerId?: string | null
-  niche?: string
   stripeSubId?: string | null
   tokenLimit?: number
   tokensUsed?: number
@@ -792,7 +761,6 @@ export type OrganizationUncheckedCreateWithoutInvitesInput = {
   slug: string
   plan?: $Enums.Plan
   stripeCustomerId?: string | null
-  niche?: string
   stripeSubId?: string | null
   tokenLimit?: number
   tokensUsed?: number
@@ -825,7 +793,6 @@ export type OrganizationUpdateWithoutInvitesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  niche?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenLimit?: Prisma.IntFieldUpdateOperationsInput | number
   tokensUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -842,7 +809,6 @@ export type OrganizationUncheckedUpdateWithoutInvitesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  niche?: Prisma.StringFieldUpdateOperationsInput | string
   stripeSubId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tokenLimit?: Prisma.IntFieldUpdateOperationsInput | number
   tokensUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -908,7 +874,6 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   slug?: boolean
   plan?: boolean
   stripeCustomerId?: boolean
-  niche?: boolean
   stripeSubId?: boolean
   tokenLimit?: boolean
   tokensUsed?: boolean
@@ -927,7 +892,6 @@ export type OrganizationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   slug?: boolean
   plan?: boolean
   stripeCustomerId?: boolean
-  niche?: boolean
   stripeSubId?: boolean
   tokenLimit?: boolean
   tokensUsed?: boolean
@@ -942,7 +906,6 @@ export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   slug?: boolean
   plan?: boolean
   stripeCustomerId?: boolean
-  niche?: boolean
   stripeSubId?: boolean
   tokenLimit?: boolean
   tokensUsed?: boolean
@@ -957,7 +920,6 @@ export type OrganizationSelectScalar = {
   slug?: boolean
   plan?: boolean
   stripeCustomerId?: boolean
-  niche?: boolean
   stripeSubId?: boolean
   tokenLimit?: boolean
   tokensUsed?: boolean
@@ -966,7 +928,7 @@ export type OrganizationSelectScalar = {
   defaultNiche?: boolean
 }
 
-export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "plan" | "stripeCustomerId" | "niche" | "stripeSubId" | "tokenLimit" | "tokensUsed" | "createdAt" | "updatedAt" | "defaultNiche", ExtArgs["result"]["organization"]>
+export type OrganizationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "plan" | "stripeCustomerId" | "stripeSubId" | "tokenLimit" | "tokensUsed" | "createdAt" | "updatedAt" | "defaultNiche", ExtArgs["result"]["organization"]>
 export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   invites?: boolean | Prisma.Organization$invitesArgs<ExtArgs>
   usageLogs?: boolean | Prisma.Organization$usageLogsArgs<ExtArgs>
@@ -989,7 +951,6 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     slug: string
     plan: $Enums.Plan
     stripeCustomerId: string | null
-    niche: string
     stripeSubId: string | null
     tokenLimit: number
     tokensUsed: number
@@ -1427,7 +1388,6 @@ export interface OrganizationFieldRefs {
   readonly slug: Prisma.FieldRef<"Organization", 'String'>
   readonly plan: Prisma.FieldRef<"Organization", 'Plan'>
   readonly stripeCustomerId: Prisma.FieldRef<"Organization", 'String'>
-  readonly niche: Prisma.FieldRef<"Organization", 'String'>
   readonly stripeSubId: Prisma.FieldRef<"Organization", 'String'>
   readonly tokenLimit: Prisma.FieldRef<"Organization", 'Int'>
   readonly tokensUsed: Prisma.FieldRef<"Organization", 'Int'>
