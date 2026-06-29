@@ -1,5 +1,5 @@
 // prisma/seed.ts
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../lib/generated/prisma";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -7,18 +7,16 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 Seeding database...");
 
-  // Check if Super Admin already exists
   const existingSuperAdmin = await prisma.user.findFirst({
-    where: { 
+    where: {
       role: "OWNER",
-      email: "superadmin@nexusai.com" 
+      email: "superadmin@nexusai.com",
     },
   });
 
   if (!existingSuperAdmin) {
     console.log("📝 Creating Super Admin...");
 
-    // Check if organization exists or create new one
     let org = await prisma.organization.findFirst({
       where: { name: "NexusAI System" },
     });
@@ -35,9 +33,8 @@ async function main() {
       });
     }
 
-    // Create super admin user
     const hashedPassword = await bcrypt.hash("SuperAdmin123!", 12);
-    
+
     await prisma.user.create({
       data: {
         name: "Super Admin",
@@ -46,7 +43,7 @@ async function main() {
         role: "OWNER",
         orgId: org.id,
         niche: "default",
-      },
+      } as any,
     });
 
     console.log("✅ Super Admin created!");
