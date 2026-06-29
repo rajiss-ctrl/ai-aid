@@ -1,4 +1,4 @@
-# NexusAI — Multi-Tenant AI SaaS Dashboard
+# AI-AID — Multi-Tenant AI SaaS Dashboard
 
 A production-ready, multi-tenant SaaS platform that gives organizations a branded AI chat assistant with full usage tracking, billing, role-based access control, and an admin control panel — all under a single deployment.
 
@@ -14,7 +14,7 @@ Most teams that want to integrate an AI assistant into their workflow face the s
 - Manage members, roles, and billing from a single dashboard
 - Tailor the AI's behavior to their specific industry (legal, medical, business)
 
-**NexusAI solves this.** It is a self-hostable, multi-tenant SaaS dashboard that any organization can deploy, configure, and manage — without giving up control to a third-party AI vendor.
+**AI-AID solves this.** It is a self-hostable, multi-tenant SaaS dashboard that any organization can deploy, configure, and manage — without giving up control to a third-party AI vendor.
 
 ---
 

@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
-  title: "AI SaaS Dashboard",
-  description: "Multi-tenant AI platform",
+  title: "NexusAI",
+  description: "Multi-tenant AI SaaS platform",
 };
 
 export default function RootLayout({
@@ -16,7 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className} suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning style={{ fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif" }}>
+        {children}
+      </body>
     </html>
   );
 }
