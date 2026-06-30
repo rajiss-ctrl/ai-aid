@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Sparkles } from "lucide-react";
@@ -14,7 +14,8 @@ const inputStyle: React.CSSProperties = {
   outline: "none",
 };
 
-export default function LoginPage() {
+// Separated into its own component so useSearchParams can be wrapped in Suspense
+function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
   const registered = params?.get("registered");
@@ -46,6 +47,82 @@ export default function LoginPage() {
 
   return (
     <div
+      className="rounded-2xl p-8"
+      style={{
+        background: "rgba(255,255,255,0.06)",
+        border: "1px solid rgba(255,255,255,0.10)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }}
+    >
+      {registered && (
+        <div
+          className="rounded-xl px-4 py-3 mb-5 text-sm"
+          style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", color: "#6ee7b7" }}
+        >
+          Account created! Sign in below.
+        </div>
+      )}
+
+      {error && (
+        <div
+          className="rounded-xl px-4 py-3 mb-5 text-sm"
+          style={{ background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.25)", color: "#fca5a5" }}
+        >
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-white/50 text-xs mb-1.5">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            required
+            className="w-full px-4 py-2.5 rounded-xl text-sm placeholder-white/20"
+            style={inputStyle}
+          />
+        </div>
+
+        <div>
+          <label className="block text-white/50 text-xs mb-1.5">Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            required
+            className="w-full px-4 py-2.5 rounded-xl text-sm placeholder-white/20"
+            style={inputStyle}
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full py-2.5 rounded-xl text-white text-sm font-medium transition-all hover:brightness-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+          style={{ background: "linear-gradient(135deg,#4f46e5,#7c3aed)" }}
+        >
+          {loading ? "Signing in…" : "Sign in"}
+        </button>
+      </form>
+
+      <p className="text-center text-white/30 text-sm mt-6">
+        Don't have an account?{" "}
+        <a href="/register" className="text-indigo-400 hover:text-indigo-300 transition-colors font-medium">
+          Create one
+        </a>
+      </p>
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <div
       className="min-h-screen flex items-center justify-center px-4"
       style={{ background: "linear-gradient(135deg, #0f0f2e 0%, #16213e 40%, #0f3460 75%, #1a1a4e 100%)" }}
     >
@@ -71,80 +148,14 @@ export default function LoginPage() {
           <p className="text-white/40 text-sm mt-1">Sign in to your account</p>
         </div>
 
-        {/* Card */}
-        <div
-          className="rounded-2xl p-8"
-          style={{
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(255,255,255,0.10)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-          }}
-        >
-          {/* Success message */}
-          {registered && (
-            <div
-              className="rounded-xl px-4 py-3 mb-5 text-sm"
-              style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", color: "#6ee7b7" }}
-            >
-              Account created! Sign in below.
-            </div>
-          )}
-
-          {/* Error */}
-          {error && (
-            <div
-              className="rounded-xl px-4 py-3 mb-5 text-sm"
-              style={{ background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.25)", color: "#fca5a5" }}
-            >
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-white/50 text-xs mb-1.5">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-                className="w-full px-4 py-2.5 rounded-xl text-sm placeholder-white/20"
-                style={inputStyle}
-              />
-            </div>
-
-            <div>
-              <label className="block text-white/50 text-xs mb-1.5">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                className="w-full px-4 py-2.5 rounded-xl text-sm placeholder-white/20"
-                style={inputStyle}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-2.5 rounded-xl text-white text-sm font-medium transition-all hover:brightness-110 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
-              style={{ background: "linear-gradient(135deg,#4f46e5,#7c3aed)" }}
-            >
-              {loading ? "Signing in…" : "Sign in"}
-            </button>
-          </form>
-
-          <p className="text-center text-white/30 text-sm mt-6">
-            Don't have an account?{" "}
-            <a href="/register" className="text-indigo-400 hover:text-indigo-300 transition-colors font-medium">
-              Create one
-            </a>
-          </p>
-        </div>
+        {/* Wrap in Suspense — required when useSearchParams is used in a page */}
+        <Suspense fallback={
+          <div className="rounded-2xl p-8 text-center" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.10)" }}>
+            <p className="text-white/40 text-sm">Loading…</p>
+          </div>
+        }>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   );
