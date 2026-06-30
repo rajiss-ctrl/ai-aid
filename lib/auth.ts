@@ -71,16 +71,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id ?? "";
-        token.role = user.role ?? "MEMBER";
-        token.orgId = user.orgId ?? "";
+        (token as any).id = user.id ?? "";
+        (token as any).role = (user as any).role ?? "MEMBER";
+        (token as any).orgId = (user as any).orgId ?? "";
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.id = token.id ?? "";
-      session.user.role = token.role ?? "MEMBER";
-      session.user.orgId = token.orgId ?? "";
+      const t = token as any;
+      session.user.id = t.id ?? "";
+      session.user.role = t.role ?? "MEMBER";
+      session.user.orgId = t.orgId ?? "";
       return session;
     },
   },
