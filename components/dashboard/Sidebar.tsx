@@ -33,8 +33,8 @@ export function Sidebar({ userName, userEmail, userRole, isAdmin }: SidebarProps
     { href: "/dashboard",          label: "Dashboard", icon: LayoutDashboard, adminOnly: false },
     { href: "/dashboard/chat",     label: "Chat",       icon: MessageSquare,   adminOnly: false },
     { href: "/dashboard/usage",    label: "Usage",      icon: BarChart3,       adminOnly: false },
-    { href: "/dashboard/settings", label: "Settings",   icon: Settings,        adminOnly: false },
     { href: "/dashboard/users",    label: "Users",      icon: Users,           adminOnly: true  },
+    { href: "/dashboard/settings", label: "Settings",   icon: Settings,        adminOnly: false },
   ];
 
   const visibleNavItems = navItems.filter(

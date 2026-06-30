@@ -10,7 +10,7 @@ async function main() {
   const existingSuperAdmin = await prisma.user.findFirst({
     where: {
       role: "OWNER",
-      email: "superadmin@nexusai.com",
+      email: "superadmin@ai-aid.com",
     },
   });
 
@@ -25,7 +25,7 @@ async function main() {
       org = await prisma.organization.create({
         data: {
           name: "AI-AID System",
-          slug: "nexusai-system-" + Date.now(),
+          slug: "ai-aid-system-" + Date.now(),
           plan: "ENTERPRISE",
           tokenLimit: 100000000,
           defaultNiche: "default",

@@ -7,9 +7,17 @@ const ADMIN_ONLY_ROUTES = ["/dashboard/users"];
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  // Determine cookie name based on environment
+  // NextAuth/Auth.js appends __Secure- in production https environments
+  const cookieName =
+    process.env.NODE_ENV === "production"
+      ? "__Secure-authjs.session-token"
+      : "authjs.session-token";
+
   const token = await getToken({
     req,
     secret: process.env.AUTH_SECRET,
+    cookieName: cookieName,
   });
 
   const isAuthed = !!token;
@@ -49,6 +57,11 @@ export async function proxy(req: NextRequest) {
   }
 
   return NextResponse.next();
+}
+
+// Next.js expects a default middleware export to invoke your logic
+export default async function middleware(req: NextRequest) {
+  return proxy(req);
 }
 
 export const config = {
