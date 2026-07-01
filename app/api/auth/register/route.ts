@@ -1,18 +1,33 @@
+// app/api/auth/register/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { rateLimit, getIp } from "@/lib/rateLimit";
 
 const schema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  password: z.string().min(6),
-  orgName: z.string().min(2),
-  niche: z.string().default("default"),
+  name: z.string().min(2).max(100),
+  email: z.string().email().toLowerCase(),
+  password: z.string().min(6).max(128),
+  orgName: z.string().min(2).max(100),
+  niche: z.enum(["default", "law", "business", "medical"]).default("default"),
   inviteToken: z.string().optional(),
 });
 
 export async function POST(req: NextRequest) {
+  // ── SECURITY: rate limit — max 5 registrations per IP per 15 minutes ───
+  const ip = getIp(req);
+  const { allowed, retryAfter } = rateLimit(`register:${ip}`, 5, 15 * 60 * 1000);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again later." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(retryAfter) },
+      }
+    );
+  }
+
   try {
     const body = await req.json();
     const data = schema.parse(body);
@@ -41,16 +56,28 @@ export async function POST(req: NextRequest) {
           expiresAt: { gt: new Date() },
         },
       });
-    }
 
-    let orgId: string;
-    let userRole: "OWNER" | "ADMIN" | "MEMBER" = "MEMBER";
+      if (!invite) {
+        return NextResponse.json(
+          { error: "Invite link is invalid or has expired" },
+          { status: 400 }
+        );
+      }
+
+      // ── SECURITY: invite email must match the registering email ──────────
+      // Without this, anyone who obtains a token can join as someone else
+      if (invite.email.toLowerCase() !== data.email.toLowerCase()) {
+        return NextResponse.json(
+          { error: "This invite was sent to a different email address" },
+          { status: 403 }
+        );
+      }
+    }
 
     if (invite) {
       // Joining existing organization via invite
-      orgId = invite.orgId;
-      userRole = invite.role === "ADMIN" ? "ADMIN" : "MEMBER";
-      
+      const userRole = invite.role === "ADMIN" ? "ADMIN" : "MEMBER";
+
       await prisma.$transaction(async (tx) => {
         await tx.user.create({
           data: {
@@ -58,7 +85,7 @@ export async function POST(req: NextRequest) {
             email: data.email,
             password: hashedPassword,
             role: userRole,
-            orgId: orgId,
+            orgId: invite.orgId,
             niche: data.niche,
           },
         });
@@ -69,12 +96,15 @@ export async function POST(req: NextRequest) {
         });
       });
     } else {
-      // Creating new organization - user becomes OWNER
-      const slug = data.orgName
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "-")
-        .replace(/-+/g, "-")
-        .slice(0, 40) + "-" + Date.now();
+      // Creating new organization — user becomes OWNER
+      const slug =
+        data.orgName
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "-")
+          .replace(/-+/g, "-")
+          .slice(0, 40) +
+        "-" +
+        Date.now();
 
       const org = await prisma.organization.create({
         data: {
@@ -91,7 +121,7 @@ export async function POST(req: NextRequest) {
           name: data.name,
           email: data.email,
           password: hashedPassword,
-          role: "OWNER",  // ✅ First user is OWNER (super admin of org)
+          role: "OWNER",
           orgId: org.id,
           niche: data.niche,
         },
@@ -103,17 +133,19 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (err: any) {
-    console.error("Registration error:", err);
-    
+    // ── SECURITY: never return raw Prisma errors or stack traces ─────────
+    // They expose table names, column names, and internal DB structure
     if (err?.name === "ZodError") {
       return NextResponse.json(
         { error: "Invalid form data" },
         { status: 400 }
       );
     }
-    
+
+    // Log internally but return a generic message to the client
+    console.error("Registration error:", err?.code ?? err?.message ?? err);
     return NextResponse.json(
-      { error: err.message || "Something went wrong", detail: err?.meta || err?.code },
+      { error: "Registration failed. Please try again." },
       { status: 500 }
     );
   }

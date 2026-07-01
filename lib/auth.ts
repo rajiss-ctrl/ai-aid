@@ -4,6 +4,7 @@ import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { rateLimit } from "@/lib/rateLimit";
 
 // Extend NextAuth types — removes need for "any"
 declare module "next-auth" {
@@ -45,6 +46,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         if (!parsed.success) return null;
 
+        // ── SECURITY: rate limit — max 10 login attempts per email per 15 min
+        // Prevents password brute-force attacks per account
+        const { allowed } = rateLimit(
+          `login:${parsed.data.email.toLowerCase()}`,
+          10,
+          15 * 60 * 1000
+        );
+        if (!allowed) return null;
+
         const user = await prisma.user.findUnique({
           where: { email: parsed.data.email },
         });
@@ -62,7 +72,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           name: user.name,
           email: user.email,
           role: user.role,
-          orgId: user.orgId ?? "", // ✅ Added fallback
+          orgId: user.orgId ?? "",
         };
       },
     }),

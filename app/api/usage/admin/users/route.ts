@@ -5,71 +5,60 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    const { role, userId } = await getTenant();
-    
-    console.log("Current user role:", role); // Debug
+    // ── SECURITY: call getTenant() once, reuse result everywhere ─────────
+    // Calling it twice wastes two DB round-trips and creates a subtle race
+    // condition where the role could theoretically differ between calls
+    const { org, role } = await getTenant();
 
-    // Only OWNER and ADMIN can access
     if (role !== "OWNER" && role !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    let users;
+    // OWNER sees all users platform-wide; ADMIN is scoped to their own org
+    const whereClause = role === "OWNER" ? {} : { orgId: org.id };
 
-    if (role === "OWNER") {
-      // Super Admin: Get ALL users from ALL organizations
-      users = await prisma.user.findMany({
-        include: {
-          chatMessages: {
-            where: { role: "assistant" },
-          },
-          organization: true,
+    const users = await prisma.user.findMany({
+      where: whereClause,
+      include: {
+        chatMessages: {
+          where: { role: "assistant" },
+          select: { tokens: true, content: true, createdAt: true },
         },
-        orderBy: { createdAt: "desc" },
-      });
-      console.log("Super Admin - Total users found:", users.length); // Debug
-    } else {
-      // Regular Admin: Get users only from their organization
-      const { org } = await getTenant();
-      users = await prisma.user.findMany({
-        where: { orgId: org.id },
-        include: {
-          chatMessages: {
-            where: { role: "assistant" },
-          },
-          organization: true,
-        },
-        orderBy: { createdAt: "desc" },
-      });
-      console.log("Regular Admin - Users in org:", users.length); // Debug
-    }
+        organization: { select: { name: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
 
-    const usersWithUsage = users.map(user => {
-      const totalTokens = user.chatMessages.reduce((sum, msg) => 
-        sum + (msg.tokens || Math.ceil(msg.content.length / 4)), 0
+    const usersWithUsage = users.map((user) => {
+      const totalTokens = user.chatMessages.reduce(
+        (sum, msg) => sum + (msg.tokens || Math.ceil(msg.content.length / 4)),
+        0
       );
       const cost = totalTokens * 0.00003;
-      const lastMessage = user.chatMessages.sort((a, b) => 
-        b.createdAt.getTime() - a.createdAt.getTime()
+      const lastMessage = user.chatMessages.sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
       )[0];
 
       return {
         id: user.id,
         email: user.email,
-        name: user.name || "Unnamed",
+        name: user.name ?? "Unnamed",
         role: user.role,
-        niche: user.niche || "default",
-        organizationName: user.organization?.name || "Unknown",
+        niche: user.niche ?? "default",
+        organizationName: user.organization?.name ?? "Unknown",
         tokens: totalTokens,
         cost: parseFloat(cost.toFixed(4)),
-        lastActive: lastMessage?.createdAt.toISOString() || user.createdAt.toISOString(),
+        lastActive: lastMessage?.createdAt.toISOString() ?? user.createdAt.toISOString(),
         messageCount: user.chatMessages.length,
       };
     });
 
     return NextResponse.json({ users: usersWithUsage });
   } catch (err: any) {
-    console.error("Admin users error:", err);
-    return NextResponse.json({ users: [], error: err.message });
+    if (err.message === "UNAUTHENTICATED") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    console.error("Admin users error:", err?.code ?? err?.message);
+    return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
   }
 }
